@@ -2,7 +2,7 @@
 
 ![Header](https://capsule-render.vercel.app/api?type=waving&color=gradient&customColorList=6,11,20&height=200&section=header&text=Production%20Kubernetes%20on%20AWS&fontSize=50&fontColor=fff&animation=twinkling&fontAlignY=35)
 
-### 🚀 Enterprise Microservices Platform | DevOps Portfolio Project
+###  | DevOps Project
 
 <p align="center">
   <img src="https://img.shields.io/badge/AWS-EKS-FF9900?style=for-the-badge&logo=amazon-aws&logoColor=white" />
