@@ -1,0 +1,23 @@
+environment: dev
+
+replicaCount: 1
+
+persistence:
+  storageClass: ""
+  size: 5Gi
+
+resources:
+  requests:
+    cpu: 500m
+    memory: 1Gi
+  limits:
+    cpu: 1
+    memory: 2Gi
+
+secrets:
+  rootPassword: password
+  userPassword: password
+
+mysql:
+  database: catalogdb
+  user: catalog_user

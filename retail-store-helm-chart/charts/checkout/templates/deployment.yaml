@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: checkout
+  labels:
+    app: checkout          
+    environment: {{ .Values.environment }}
+spec:            
+  # replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: checkout         
+      component: backend
+  template:
+    metadata:
+      labels:
+        app: checkout       
+        component: backend
+    spec:
+      containers:
+      - name: checkout
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        ports:
+        - containerPort: 8080  
+        envFrom:
+        - configMapRef:
+            name: checkout-configmap
+        env:
+        - name: NODE_OPTIONS
+          value: "--max-old-space-size=768"
+        resources:
+{{ toYaml .Values.resources | indent 10 }}
+{{ include "checkout.healthProbes" . | indent 8 }}

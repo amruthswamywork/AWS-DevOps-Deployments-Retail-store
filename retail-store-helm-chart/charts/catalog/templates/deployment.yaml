@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: catalog  
+  labels:
+    app: catalog
+    environment: {{ .Values.environment }}
+spec:      
+  # replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: catalog
+      component: backend
+  template:
+    metadata:
+      labels:
+        app: catalog
+        component: backend
+    spec:
+      containers:
+      - name: catalog
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"     
+        ports:
+        - containerPort: 8080 
+        envFrom:
+        - configMapRef:
+            name: catalog-map
+        - secretRef:
+            name: catalog-secret
+        resources:
+{{ toYaml .Values.resources | indent 10 }}
+{{ include "catalog.healthProbes" . | indent 8 }}

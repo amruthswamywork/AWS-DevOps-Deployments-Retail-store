@@ -1,0 +1,102 @@
+# Global ENV
+global:
+  environment: prod
+  
+# DYNAMODB SERVICE
+retail-store-dynamodb:
+  enabled: false
+
+# CART SERVICE
+retail-store-cart:
+  image:
+    tag: v1 # Use dev-specific image tags
+  resources:
+    limits:
+      cpu: 500m
+      memory: 1024Mi
+    requests:
+      cpu: 200m 
+      memory: 512Mi
+  aws:
+    authMethod: irsa
+  serviceAccount:
+    create: true
+    name: cart-sa
+    roleArn: arn:aws:iam::050451363764:role/cart-dynamodb-role
+    
+retail-store-catalog:
+  image:
+    tag: v1
+  resources:
+    limits:
+      cpu: 500m
+      memory: 1024Mi
+    requests:
+      cpu: 200m 
+      memory: 512Mi
+
+retail-store-checkout:
+  image:
+    tag: v1
+  resources:
+    limits:
+      cpu: 500m
+      memory: 1024Mi
+    requests:
+      cpu: 200m 
+      memory: 512Mi
+
+retail-store-orders:
+  image:
+    tag: v1
+  resources:
+    limits:
+      cpu: 500m
+      memory: 1024Mi
+    requests:
+      cpu: 200m 
+      memory: 512Mi
+
+retail-store-ui:
+  image:
+    tag: v1
+  resources:
+    limits:
+      cpu: 500m
+      memory: 1024Mi
+    requests:
+      cpu: 200m 
+      memory: 512Mi
+  service:
+    type: LoadBalancer  
+
+# MYSQL DATABASE
+retail-store-mysql:
+  replicaCount: 1
+  persistence:
+    storageClass: ebs-sc
+    size: 5Gi
+  resources:
+    requests:
+      cpu: 200m
+      memory: 512Mi
+    limits:
+      cpu: 500m
+      memory: 1Gi
+  secrets:
+    rootPassword: password
+    userPassword: password
+
+# POSTGRESQL DATABASE
+retail-store-postgresql:
+  replicaCount: 1
+  persistence:
+    storageClass: ebs-sc
+    size: 5Gi
+  resources:
+    requests:
+      cpu: 200m
+      memory: 512Mi
+    limits:
+      cpu: 500m
+      memory: 1Gi 

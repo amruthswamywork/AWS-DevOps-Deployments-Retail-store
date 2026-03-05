@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cart-deployment    
+  labels:
+    app: cart              
+    environment: {{ .Values.environment }}
+spec: 
+  selector:
+    matchLabels:
+      app: cart            
+      component: backend
+  template:
+    metadata:
+      labels:
+        app: cart          
+        component: backend
+    spec:
+      {{- if eq .Values.aws.authMethod "irsa" }}
+      serviceAccountName: {{ .Values.serviceAccount.name }}
+      {{- end }}
+      containers:
+      - name: cart
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        ports:
+        - containerPort: 8080   
+        envFrom:
+        - configMapRef:
+            name: cart-configmap
+        {{- if eq .Values.aws.authMethod "static" }}
+        - secretRef:
+            name: aws-static-creds
+        {{- end }}
+        resources:
+{{ toYaml .Values.resources | indent 10 }}
+{{ include "cart.healthProbes" . | indent 8 }}

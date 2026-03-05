@@ -1,0 +1,19 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: ui-monitor
+  namespace: monitoring
+  labels:
+    release: monitoring
+spec:
+  selector:
+    matchLabels:
+      app: ui
+      component: frontend
+  namespaceSelector:
+    matchNames:
+      - retail-store-{{ .Values.global.environment }}
+  endpoints:
+  - port: ui
+    path: /actuator/prometheus
+    interval: 15s

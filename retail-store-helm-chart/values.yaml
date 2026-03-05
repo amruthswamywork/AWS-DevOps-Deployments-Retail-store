@@ -1,0 +1,27 @@
+# Default values for all services, no environment logic
+retail-store-cart:
+  enabled: true
+
+retail-store-catalog:
+  enabled: true
+
+retail-store-checkout:
+  enabled: true
+
+retail-store-orders:
+  enabled: true
+
+retail-store-ui:
+  enabled: true
+
+# Database defaults
+retail-store-mysql:
+  enabled: true
+retail-store-redis:
+  enabled: true
+retail-store-rabbitmq:
+  enabled: true
+retail-store-postgresql:
+  enabled: true
+retail-store-dynamodb:
+  enabled: false

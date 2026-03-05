@@ -1,0 +1,180 @@
+setup of k8s eks
+
+eksctl create cluster --config-file=eks.yaml
+
+
+kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
+
+#install ebs-csi driver && attach ec2fullaccess role to nodes
+kubectl apply -k "github.com/kubernetes-sigs/aws-ebs-csi-driver/deploy/kubernetes/overlays/stable/?ref=release-1.25"
+
+#also attach full DynamoDb access to EKS node Roles
+
+kubectl config set-context --current --namespace=retail-store-prod
+
+helm dependency update
+
+helm template retail-store . \
+  -f values.yaml \
+  -f values/eks/values-prod-eks.yaml
+
+helm upgrade --install retail-store . \
+  -n retail-store-prod \
+  -f values.yaml \
+  -f values/eks/values-prod-eks.yaml \
+  --create-namespace
+
+# command to upgrade helm chart  
+helm upgrade retail-store ./retail-store-helm-chart -n retail-store-dev
+
+
+kubectl get pods
+kubectl get svc
+kubectl get hpa
+kubectl logs -f deployment/cart-deployment
+kubectl top nodes
+kubectl top pods
+
+helm uninstall retail-store -n retail-store-prod
+
+kubectl delete namespace retail-store-prod
+
+
+#IRSA setup for cart tom access dynamodb
+
+aws eks describe-cluster \
+  --name eks-ultra-cheap \
+  --query "cluster.identity.oidc.issuer"
+
+#check 
+aws iam list-open-id-connect-providers
+
+#verification
+
+kubectl get sa cart-sa -n retail-store-prod -o yaml
+kubectl logs deploy/cart-deployment -n retail-store-prod
+
+#rollout restart
+kubectl rollout restart deploy cart-deployment -n retail-store-dev
+
+#pv,pvc,svc check
+
+kubectl get sc
+kubectl get pvc
+kubectl get pods
+
+# final debugging command to memorise
+
+aws iam list-open-id-connect-providers
+aws iam get-role --role-name cart-dynamodb-role
+kubectl get sa cart-sa -o yaml
+kubectl logs deploy/cart-deployment
+
+#check dynamodb
+
+aws dynamodb describe-table --table-name Items
+
+#storage
+
+kubectl get sc
+kubectl get pvc
+kubectl get pv
+kubectl describe pvc mysql-data-mysql-0
+
+
+# login into mysql
+
+kubectl exec -it mysql-0 -- bash	
+mysql -u root -p password
+SHOW DATABASES;
+
+# login into postgresql
+
+kubectl exec -it postgresql-0 -- bash
+psql -U postgres_user -d postgres
+
+\l --> use this to list all database
+
+\c orders --> use this to connect to orders db
+
+\dt --> use this to list tables
+
+SELECT * FROM orders; --> List tables
+
+
+#delete full resources
+
+helm uninstall retail-store -n retail-store-prod
+
+kubectl delete namespace retail-store-prod
+
+eksctl delete cluster --config-file=eks.yaml
+
+#advantages of healthProbes
+
+they reduced deployment time from 12minutes to 1.5 minutes as i dont have to manually start 
+each stopped deployment due to connection failure 
+
+liveness probe --> check if application is working
+readiness probe --> check if application is ready to serve
+startup probe --> give application time to start to prevent it being killed 
+
+## installing monitoring
+
+#creating monitoring namespace
+kubectl create namespace monitoring
+
+#adding helm repo
+helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+helm repo update
+
+#Install kube-prometheus-stack
+helm install monitoring prometheus-community/kube-prometheus-stack \
+  -n monitoring
+
+#Verify Pods
+kubectl get pods -n monitoring
+
+# ✅ Correct Ways to Access Grafana 
+
+## OPTION 1 — SSH Tunnel 
+
+If you are on your **local laptop** and k3s is on an EC2 instance:
+
+### Step 1: SSH into EC2 with port forwarding
+
+```bash
+cd Sarthak\'s-Important/
+ssh -i EC2-key.pem -L 3000:localhost:3000 ec2-user@13.203.220.13
+ssh -i EC2-key.pem -L 9090:localhost:9090 ec2-user@3.110.114.4
+```
+
+### Step 2: On EC2, run
+
+```bash
+kubectl port-forward svc/monitoring-grafana 3000:80 -n monitoring
+kubectl port-forward svc/prometheus-operated 9090:9090 -n monitoring
+```
+
+### Step 3: Open on your laptop
+
+```
+http://localhost:3000
+
+# 🔐 Grafana Login (Reminder)
+
+```bash
+kubectl get secret monitoring-grafana -n monitoring \
+  -o jsonpath="{.data.admin-password}" | base64 -d
+
+```
+
+User:
+```
+admin
+```
+
+#what i changed 
+
+added name to service 
+change service labels of cart to match then with selector

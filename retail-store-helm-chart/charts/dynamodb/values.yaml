@@ -1,0 +1,13 @@
+environment: dev
+
+enabled: false
+
+replicaCount: 1
+
+resources:
+  requests:
+    cpu: 250m
+    memory: 512Mi
+  limits:
+    cpu: 250m
+    memory: 512Mi

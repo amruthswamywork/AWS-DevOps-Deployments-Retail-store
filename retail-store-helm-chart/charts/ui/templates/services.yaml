@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: ui
+  labels:
+    app: ui
+    component: frontend
+spec:
+  type: {{ .Values.service.type }}
+  selector:
+    app: ui          
+    component: frontend
+  ports:
+  - name: ui
+    protocol: TCP
+    port: 80
+    targetPort: 8080
+  {{- if eq .Values.service.type "NodePort" }}
+    nodePort: {{ .Values.service.nodePort }}
+  {{- end }}

@@ -1,0 +1,8 @@
+@Library('retail-lib') _
+
+microservicePipeline(
+    service: "cart",
+    type: "maven",
+    namespace: "prod",
+    env: "eks"
+)

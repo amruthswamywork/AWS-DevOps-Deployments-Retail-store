@@ -1,0 +1,34 @@
+environment: dev
+
+image:
+  repository: sarthak6700/retail-store-cart
+  tag: latest
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 256Mi
+  limits:
+    cpu: 300m
+    memory: 512Mi
+
+hpa:
+  minReplicas: 1
+  maxReplicas: 3
+  averageUtilization: 70
+
+aws:
+  authMethod: none   # none | static | irsa
+
+serviceAccount:
+  name: ""
+
+secrets:
+  enabled: false
+
+configmap:
+  region: ap-south-1
+  tableName: Items
+  
+  # In EKS, applications should never use static AWS credentials. DynamoDB access must be granted using IAM Roles for Service Accounts,
+  # allowing the AWS SDK to authenticate securely without exposing secrets.

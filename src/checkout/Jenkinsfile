@@ -1,0 +1,8 @@
+@Library('retail-lib') _
+
+microservicePipeline(
+    service: "checkout",
+    type: "node",
+    namespace: "prod",
+    env: "eks"
+)

@@ -1,0 +1,8 @@
+@Library('retail-lib') _
+
+microservicePipeline(
+    service: "catalog",
+    type: "go",
+    namespace: "prod",
+    env: "eks"
+)

@@ -1,0 +1,41 @@
+networks:
+  retail-net:
+    driver: bridge
+services:
+  cart:
+    image: sarthak6700/retail-store-cart:latest
+    container_name: cart
+    networks:
+      - retail-net
+  catalog:
+    image: sarthak6700/retail-store-catalog:latest
+    container_name: catalog
+    networks:
+      - retail-net
+  orders:
+    image: sarthak6700/retail-store-orders:latest
+    container_name: orders
+    networks:
+      - retail-net
+  checkout:
+    image: sarthak6700/retail-store-checkout:latest
+    container_name: checkout
+    networks:
+      - retail-net
+  ui:
+    image: sarthak6700/retail-store-ui:latest
+    container_name: ui
+    networks:
+      - retail-net
+    ports:
+      - 80:8080
+    environment:
+      RETAIL_UI_ENDPOINTS_CARTS: http://cart:8080
+      RETAIL_UI_ENDPOINTS_CATALOG: http://catalog:8080
+      RETAIL_UI_ENDPOINTS_ORDERS: http://orders:8080
+      RETAIL_UI_ENDPOINTS_CHECKOUT: http://checkout:8080
+    depends_on:
+      - cart
+      - catalog
+      - checkout
+      - orders
