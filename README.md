@@ -512,5 +512,61 @@ Auto version detection • Multi-language builds • Environment-specific deploy
 
 <div align="center">
 
-#   A W S - D e v O p s - D e p l o y m e n t s - R e t a i l - s t o r e  
- 
+---
+
+## 🚀 Live Demo & Repository
+
+<div align="center">
+
+🌐 **Project Repository**  
+https://github.com/amruthswamywork/production-kubernetes-aws
+
+📂 **Complete Infrastructure Code**
+Terraform • Kubernetes • Helm • Jenkins Pipelines
+
+📊 **Production Stack**
+AWS EKS • Docker • Prometheus • Grafana • Helm
+
+</div>
+
+---
+
+## 📌 Project Summary
+
+This project demonstrates how to build and operate a **production-grade Kubernetes platform on AWS** using modern DevOps practices.
+
+Key capabilities implemented:
+
+✔ Infrastructure provisioning using **Terraform**  
+✔ Secure Kubernetes cluster with **AWS EKS**  
+✔ Automated **CI/CD pipelines using Jenkins**  
+✔ Containerized microservices using **Docker**  
+✔ Deployment automation using **Helm**  
+✔ Monitoring and observability with **Prometheus & Grafana**  
+✔ Secure AWS access using **IRSA (IAM Roles for Service Accounts)**  
+
+This project reflects **real-world DevOps workflows used in modern cloud-native environments.**
+
+---
+
+## 👨‍💻 Author
+
+**Amruth Swamy C P**
+
+Cloud & DevOps Engineer | AWS | Kubernetes | Terraform | CI/CD
+
+📧 Email: amruthswamy11@gmail.com  
+🔗 LinkedIn: https://www.linkedin.com/in/amruthswamycp079/  
+💻 GitHub: https://github.com/amruthswamywork  
+🌐 Portfolio:  
+https://amruthswamywork.github.io/Amrruthswamy_Cloud-DevOps-SRE_Engineer_portfolio-/#/
+
+---
+
+<div align="center">
+
+
+
+</div>
+
+---
